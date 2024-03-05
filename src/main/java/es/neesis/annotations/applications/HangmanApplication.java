@@ -1,6 +1,7 @@
 package es.neesis.annotations.applications;
 
 import es.neesis.annotations.services.IHangmanService;
+import es.neesis.annotations.services.IHangmanStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +11,13 @@ import java.util.Scanner;
 public class HangmanApplication {
 
     private IHangmanService hangmanService;
+    private IHangmanStatusService hangmanStatusService;
     private Scanner scanner;
 
-    public HangmanApplication(IHangmanService hangmanGameService) {
+    public HangmanApplication(IHangmanService hangmanGameService,
+                              IHangmanStatusService hangmanStatusService) {
         this.hangmanService = hangmanGameService;
+        this.hangmanStatusService = hangmanStatusService;
         this.scanner = new Scanner(System.in);
     }
     public void startNewGame(){
@@ -23,7 +27,8 @@ public class HangmanApplication {
         while (continuePlaying) {
             hangmanService.startNewGame();
 
-            while (!hangmanService.isGameOver()) {
+            while (!hangmanStatusService.isGameOver(hangmanService.getRemainingAttempts(),
+                    hangmanService.getMaskedWord())) {
                 System.out.println("Palabra: " + hangmanService.getMaskedWord());
                 System.out.println("Intentos restantes: " + hangmanService.getRemainingAttempts());
                 System.out.print("Ingrese una letra o palabra: ");
@@ -37,7 +42,7 @@ public class HangmanApplication {
                 }
             }
 
-            if (hangmanService.isGameWon()) {
+            if (hangmanStatusService.isGameWon(hangmanService.getMaskedWord())) {
                 System.out.println("¡Felicidades! ¡Has adivinado la palabra correctamente!");
             } else {
                 System.out.println("Lo siento, has agotado todos los intentos." +

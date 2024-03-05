@@ -46,15 +46,6 @@ public class HangmanService implements IHangmanService{
         }
     }
 
-    @Override
-    public boolean isGameOver() {
-        return remainingAttempts <= 0 || maskedWord.indexOf("_") == -1;
-    }
-
-    @Override
-    public boolean isGameWon() {
-        return maskedWord.indexOf("_") == -1;
-    }
 
     @Override
     public String getMaskedWord() {
