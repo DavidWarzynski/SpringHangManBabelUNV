@@ -1,58 +1,76 @@
 package es.neesis.annotations.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class HangmanService implements IHangmanService{
 
-    private String targetWord;
-    private StringBuilder maskedWord;
-    private int remainingAttempts;
+
+    private HangmanStatus hangmanStatus;
+
+    public HangmanService(){
+        this.hangmanStatus = new HangmanStatus();
+    }
 
 
     @Override
     public void startNewGame(String targetWord) {
-        this.targetWord = targetWord;
-        maskedWord = new StringBuilder("_".repeat(targetWord.length()));
-        remainingAttempts = 8;
+       StringBuilder maskedWord = new StringBuilder("_".repeat(targetWord.length()));
+        int remainingAttempts = 8;
+
+        hangmanStatus.setTargetWord(targetWord);
+        hangmanStatus.setMaskedWord(maskedWord);
+        hangmanStatus.setRemainingAttempts(remainingAttempts);
+
     }
 
     @Override
     public void guessLetter(char letter) {
         boolean letterFound = false;
-        for (int i = 0; i < targetWord.length(); i++) {
-            if (targetWord.charAt(i) == letter) {
-                maskedWord.setCharAt(i, letter);
+        for (int i = 0; i < hangmanStatus.getTargetWord().length(); i++) {
+            if (hangmanStatus.getTargetWord().charAt(i) == letter) {
+                hangmanStatus.getMaskedWord().setCharAt(i, letter);
                 letterFound = true;
             }
         }
         if (!letterFound) {
-            remainingAttempts--;
+            hangmanStatus.setRemainingAttempts(hangmanStatus.getRemainingAttempts()-1);
         }
     }
 
     @Override
     public void guessWord(String word) {
-        if (word.equalsIgnoreCase(targetWord)) {
-            maskedWord = new StringBuilder(targetWord);
+        if (word.equalsIgnoreCase(hangmanStatus.getTargetWord())) {
+            hangmanStatus.setMaskedWord(new StringBuilder(hangmanStatus.getTargetWord()));
         } else {
-            remainingAttempts--;
+            hangmanStatus.setRemainingAttempts(hangmanStatus.getRemainingAttempts()-1);
         }
     }
 
 
     @Override
     public String getMaskedWord() {
-        return maskedWord.toString();
+        return hangmanStatus.getMaskedWord().toString();
     }
 
     @Override
     public String getTargetWord() {
-        return targetWord;
+        return hangmanStatus.getTargetWord();
     }
 
     @Override
     public int getRemainingAttempts() {
-        return remainingAttempts;
+        return hangmanStatus.getRemainingAttempts();
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return hangmanStatus.getRemainingAttempts() <= 0 || hangmanStatus.getMaskedWord().indexOf("_") == -1;
+    }
+
+    @Override
+    public boolean isGameWon() {
+        return hangmanStatus.getMaskedWord().indexOf("_") == -1;
     }
 }

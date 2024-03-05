@@ -1,9 +1,8 @@
 package es.neesis.annotations.applications;
 
+import es.neesis.annotations.services.HangmanStatus;
 import es.neesis.annotations.services.IHangmanService;
-import es.neesis.annotations.services.IHangmanStatusService;
 import es.neesis.annotations.services.IWordProviderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
@@ -12,15 +11,12 @@ import java.util.Scanner;
 public class HangmanApplication {
 
     private IHangmanService hangmanService;
-    private IHangmanStatusService hangmanStatusService;
     private IWordProviderService wordProviderService;
     private Scanner scanner;
 
     public HangmanApplication(IHangmanService hangmanGameService,
-                              IHangmanStatusService hangmanStatusService,
                               IWordProviderService wordProviderService) {
         this.hangmanService = hangmanGameService;
-        this.hangmanStatusService = hangmanStatusService;
         this.wordProviderService= wordProviderService;
         this.scanner = new Scanner(System.in);
     }
@@ -31,8 +27,7 @@ public class HangmanApplication {
         while (continuePlaying) {
             hangmanService.startNewGame(wordProviderService.getRandomWord().toUpperCase());
 
-            while (!hangmanStatusService.isGameOver(hangmanService.getRemainingAttempts(),
-                    hangmanService.getMaskedWord())) {
+            while (!hangmanService.isGameOver()) {
                 System.out.println("Palabra: " + hangmanService.getMaskedWord());
                 System.out.println("Intentos restantes: " + hangmanService.getRemainingAttempts());
                 System.out.print("Ingrese una letra o palabra: ");
@@ -46,7 +41,7 @@ public class HangmanApplication {
                 }
             }
 
-            if (hangmanStatusService.isGameWon(hangmanService.getMaskedWord())) {
+            if (hangmanService.isGameWon()) {
                 System.out.println("¡Felicidades! ¡Has adivinado la palabra correctamente!");
             } else {
                 System.out.println("Lo siento, has agotado todos los intentos." +

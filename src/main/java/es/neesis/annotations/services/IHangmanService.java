@@ -5,6 +5,8 @@ public interface IHangmanService {
     void guessLetter(char letter);
     void guessWord(String word);
     String getMaskedWord();
+    boolean isGameWon();
+    boolean isGameOver();
     String getTargetWord();
     int getRemainingAttempts();
 }
