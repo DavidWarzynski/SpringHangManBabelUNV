@@ -5,20 +5,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class HangmanService implements IHangmanService{
 
-
-    private IWordProviderService wordProviderService;
-
     private String targetWord;
     private StringBuilder maskedWord;
     private int remainingAttempts;
 
-    public HangmanService(IWordProviderService wordProviderService){
-        this.wordProviderService = wordProviderService;
-    }
 
     @Override
-    public void startNewGame() {
-        targetWord = wordProviderService.getRandomWord().toUpperCase();
+    public void startNewGame(String targetWord) {
+        this.targetWord = targetWord;
         maskedWord = new StringBuilder("_".repeat(targetWord.length()));
         remainingAttempts = 8;
     }

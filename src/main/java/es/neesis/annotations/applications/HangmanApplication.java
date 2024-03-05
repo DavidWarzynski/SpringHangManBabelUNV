@@ -2,6 +2,7 @@ package es.neesis.annotations.applications;
 
 import es.neesis.annotations.services.IHangmanService;
 import es.neesis.annotations.services.IHangmanStatusService;
+import es.neesis.annotations.services.IWordProviderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,12 +13,15 @@ public class HangmanApplication {
 
     private IHangmanService hangmanService;
     private IHangmanStatusService hangmanStatusService;
+    private IWordProviderService wordProviderService;
     private Scanner scanner;
 
     public HangmanApplication(IHangmanService hangmanGameService,
-                              IHangmanStatusService hangmanStatusService) {
+                              IHangmanStatusService hangmanStatusService,
+                              IWordProviderService wordProviderService) {
         this.hangmanService = hangmanGameService;
         this.hangmanStatusService = hangmanStatusService;
+        this.wordProviderService= wordProviderService;
         this.scanner = new Scanner(System.in);
     }
     public void startNewGame(){
@@ -25,7 +29,7 @@ public class HangmanApplication {
 
         boolean continuePlaying = true;
         while (continuePlaying) {
-            hangmanService.startNewGame();
+            hangmanService.startNewGame(wordProviderService.getRandomWord().toUpperCase());
 
             while (!hangmanStatusService.isGameOver(hangmanService.getRemainingAttempts(),
                     hangmanService.getMaskedWord())) {
