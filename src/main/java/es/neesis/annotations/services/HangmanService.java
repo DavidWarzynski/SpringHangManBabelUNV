@@ -1,6 +1,6 @@
 package es.neesis.annotations.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import es.neesis.annotations.models.HangmanStatus;
 import org.springframework.stereotype.Service;
 
 @Service

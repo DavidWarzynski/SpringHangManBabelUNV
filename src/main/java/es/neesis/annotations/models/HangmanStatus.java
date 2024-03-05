@@ -1,4 +1,4 @@
-package es.neesis.annotations.services;
+package es.neesis.annotations.models;
 
 public class HangmanStatus {
     private String targetWord;
@@ -26,15 +26,15 @@ public class HangmanStatus {
         return remainingAttempts;
     }
 
-    protected void setTargetWord(String targetWord) {
+    public void setTargetWord(String targetWord) {
         this.targetWord = targetWord;
     }
 
-    protected void setMaskedWord(StringBuilder maskedWord) {
+    public void setMaskedWord(StringBuilder maskedWord) {
         this.maskedWord = maskedWord;
     }
 
-    protected void setRemainingAttempts(int remainingAttempts) {
+    public void setRemainingAttempts(int remainingAttempts) {
         this.remainingAttempts = remainingAttempts;
     }
 }
